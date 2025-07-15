@@ -1,20 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: microservicio
+  name: microservicio-2
   namespace: microservices
+  labels:
+    app: microservicio-2
 spec:
   selector:
     matchLabels:
-      app: microservicio
+      app: microservicio-2
   template:
     metadata:
       labels:
-        app: microservicio
+        app: microservicio-2
     spec:
       containers:
-        - name: microservicio
-          image: 628366968712.dkr.ecr.us-east-1.amazonaws.com/microservice/tfm-microservice:latest
+        - name: microservicio-2
+          image: 628366968712.dkr.ecr.us-east-1.amazonaws.com/tfm_microservice_2:latest
           ports:
             - containerPort: 8080
           resources:
@@ -28,14 +30,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: microservicio
+  name: microservicio-2
   namespace: microservices
   labels:
-    app: microservicio
+    app: microservicio-2
 spec:
   type: LoadBalancer
   selector:
-    app: microservicio
+    app: microservicio-2
   ports:
     - name: http
       port: 80
