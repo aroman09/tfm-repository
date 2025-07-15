@@ -7,3 +7,7 @@ output "subnet_private_id" {
   description = "The ID of the private subnet"
   value       = aws_subnet.tfm_subnet_privada.id
 }
+
+output "subnet_private_id_2" {
+  value = aws_subnet.tfm_subnet_privada_2.id
+}

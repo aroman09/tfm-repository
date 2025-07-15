@@ -74,3 +74,18 @@ resource "aws_main_route_table_association" "tfm_main_rt_private" {
   vpc_id         = var.vpc_id
   route_table_id = aws_route_table.tfm_rt_private.id
 }
+
+resource "aws_subnet" "tfm_subnet_privada_2" {
+  vpc_id                  = var.vpc_id
+  cidr_block               = "10.0.3.0/24"
+  availability_zone        = "us-east-1b"
+  map_public_ip_on_launch  = false
+  tags = {
+    Name = "tfm-subred-privada-2"
+  }
+}
+
+resource "aws_route_table_association" "private_assoc_2" {
+  subnet_id      = aws_subnet.tfm_subnet_privada_2.id
+  route_table_id = aws_route_table.tfm_rt_private.id
+}
