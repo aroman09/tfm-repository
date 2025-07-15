@@ -25,7 +25,9 @@ resource "aws_subnet" "tfm_subnet_privada" {
 }
 
 resource "aws_eip" "nat_eip" {
-  vpc = true
+  tags = {
+    Name = "tfm-nat-eip"
+  }
 }
 
 resource "aws_nat_gateway" "tfm_nat" {
@@ -65,5 +67,10 @@ resource "aws_route_table" "tfm_rt_private" {
 
 resource "aws_route_table_association" "private_assoc" {
   subnet_id      = aws_subnet.tfm_subnet_privada.id
+  route_table_id = aws_route_table.tfm_rt_private.id
+}
+
+resource "aws_main_route_table_association" "tfm_main_rt_private" {
+  vpc_id         = var.vpc_id
   route_table_id = aws_route_table.tfm_rt_private.id
 }
