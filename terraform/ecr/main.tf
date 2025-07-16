@@ -11,3 +11,9 @@ resource "aws_ecr_repository" "repositories" {
     Name = each.value
   }
 }
+
+resource "kubernetes_namespace" "microservices" {
+  metadata {
+    name = "microservices"
+  }
+}
