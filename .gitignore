@@ -1,6 +1,7 @@
 # .gitignore recomendado para Terraform
 .terraform/
 *.tfstate
+*.terraform.lock.hcl
 *.tfstate.backup
 .crash
 *.log
