@@ -32,7 +32,7 @@ resource "helm_release" "kube_prometheus_stack" {
       metricAllowlist:
         - kube_hpa_status_current_replicas
       collectors:
-        - horizontalpodautoscaler
+        - horizontalpodautoscalers
       metricLabelsAllowlist:
         - pods=[*]
         - deployments=[*]
