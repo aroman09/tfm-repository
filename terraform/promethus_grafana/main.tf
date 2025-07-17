@@ -27,6 +27,9 @@ resource "helm_release" "kube_prometheus_stack" {
     grafana:
       service:
         type: LoadBalancer
+    kube-state-metrics:
+      metricLabelsAllowlist:
+        - pods=[*]
     EOF
   ]
 }
