@@ -1,3 +1,4 @@
+# -------------------- DEPLOYMENT --------------------
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -26,7 +27,9 @@ spec:
             limits:
               cpu: "200m"
               memory: "256Mi"
+
 ---
+# -------------------- SERVICE: LoadBalancer (externo) --------------------
 apiVersion: v1
 kind: Service
 metadata:
@@ -41,4 +44,22 @@ spec:
   ports:
     - name: http
       port: 80
+      targetPort: 8080
+
+---
+# -------------------- SERVICE: ClusterIP (para Prometheus) --------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: microservicio-1-monitor
+  namespace: microservices
+  labels:
+    app: monitor-microservicio-1
+spec:
+  type: ClusterIP
+  selector:
+    app: microservicio-1
+  ports:
+    - name: http
+      port: 8080
       targetPort: 8080

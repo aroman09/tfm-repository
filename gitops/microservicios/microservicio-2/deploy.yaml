@@ -1,3 +1,4 @@
+# -------------------- DEPLOYMENT --------------------
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,7 +17,7 @@ spec:
     spec:
       containers:
         - name: microservicio-2
-          image: 628366968712.dkr.ecr.us-east-1.amazonaws.com/tfm_microservice_2:latest
+          image: 628366968712.dkr.ecr.us-east-1.amazonaws.com/tfm_microservice_1:latest
           ports:
             - containerPort: 8080
           resources:
@@ -26,7 +27,9 @@ spec:
             limits:
               cpu: "200m"
               memory: "256Mi"
+
 ---
+# -------------------- SERVICE: LoadBalancer (externo) --------------------
 apiVersion: v1
 kind: Service
 metadata:
@@ -41,4 +44,22 @@ spec:
   ports:
     - name: http
       port: 80
+      targetPort: 8080
+
+---
+# -------------------- SERVICE: ClusterIP (para Prometheus) --------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: microservicio-2-monitor
+  namespace: microservices
+  labels:
+    app: monitor-microservicio-2
+spec:
+  type: ClusterIP
+  selector:
+    app: microservicio-2
+  ports:
+    - name: http
+      port: 8080
       targetPort: 8080
