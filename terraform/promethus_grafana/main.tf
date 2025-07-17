@@ -33,3 +33,19 @@ resource "helm_release" "kube_prometheus_stack" {
     EOF
   ]
 }
+
+# metrics-server
+resource "helm_release" "metrics_server" {
+  name       = "metrics-server"
+  namespace  = "kube-system"
+  repository = "https://kubernetes-sigs.github.io/metrics-server/"
+  chart      = "metrics-server"
+  version    = "3.12.1"
+
+  values = [<<EOF
+    args:
+      - --kubelet-insecure-tls
+      - --kubelet-preferred-address-types=InternalIP
+    EOF
+  ]
+}
