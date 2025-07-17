@@ -31,6 +31,7 @@ resource "helm_release" "kube_prometheus_stack" {
       metricLabelsAllowlist:
         - pods=[*]
         - deployments=[*]
+        - horizontalpodautoscalers=[*]
     EOF
   ]
 }
