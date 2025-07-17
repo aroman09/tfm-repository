@@ -28,6 +28,11 @@ resource "helm_release" "kube_prometheus_stack" {
       service:
         type: LoadBalancer
     kube-state-metrics:
+      enabled: true
+      metricAllowlist:
+        - kube_hpa_status_current_replicas
+      collectors:
+        - horizontalpodautoscaler
       metricLabelsAllowlist:
         - pods=[*]
         - deployments=[*]
