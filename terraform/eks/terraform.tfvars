@@ -1,8 +1,8 @@
-vpc_id             = "vpc-0570c656f0fe17245"
-subnet_private_ids = ["subnet-07fd0809a865ae65c", "subnet-0371c5b1285897e6d"]
+vpc_id             = "vpc-0d5b58312ff976c7b"
+subnet_private_ids = ["subnet-0abbfdd4c34c0bed1", "subnet-07cd3ef29a38d4e0c"]
 
 eks_cluster_role_arn = "arn:aws:iam::628366968712:role/LabRole"  # Cambia tu account-id
 eks_node_role_arn = "arn:aws:iam::628366968712:role/LabRole"
 
 
-nlb_dns = "tfm-nlb-577dc1305a65ee62.elb.us-east-1.amazonaws.com"
+nlb_dns = "tfm-nlb-51d53bde9ee8220e.elb.us-east-1.amazonaws.com"

@@ -14,6 +14,12 @@ resource "kubernetes_namespace" "argocd" {
   }
 }
 
+resource "kubernetes_namespace" "microservices" {
+  metadata {
+    name = "microservices"
+  }
+}
+
 resource "helm_release" "argocd" {
   name       = "argocd"
   namespace  = kubernetes_namespace.argocd.metadata[0].name
