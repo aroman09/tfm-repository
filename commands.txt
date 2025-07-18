@@ -1,0 +1,277 @@
+# 1. Actualiza paquetes
+sudo yum update -y
+
+# 2. Instala utilidades necesarias
+sudo yum install -y yum-utils unzip curl
+
+# 3. Descarga la última versión estable (o específica si quieres)
+TERRAFORM_VERSION="1.7.5"
+
+curl -o terraform.zip "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip"
+
+# 4. Descomprime el binario
+unzip terraform.zip
+
+# 5. Mueve Terraform a una ruta global
+sudo mv terraform /usr/local/bin/
+
+# 6. Verifica que se haya instalado correctamente
+terraform version
+
+git clone repo
+
+
+terraform init
+terraform plan
+terraform apply
+
+aws sts get-caller-identity --query Account --output text
+
+login aws con docker
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 628366968712.dkr.ecr.us-east-1.amazonaws.com
+
+git
+git clone https://github.com/aroman09/code-aws-gitops.git
+
+ecr
+628366968712.dkr.ecr.us-east-1.amazonaws.com/microservice/tfm-microservice
+
+aws ecr describe-repositories
+
+
+
+docker build -t tfm-microservice-1 .
+docker images
+docker tag tfm-microservice-1:latest 628366968712.dkr.ecr.us-east-1.amazonaws.com/tfm_microservice_1:latest
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 628366968712.dkr.ecr.us-east-1.amazonaws.com
+docker push 628366968712.dkr.ecr.us-east-1.amazonaws.com/tfm_microservice_1:latest
+
+docker build -t tfm-microservice-2 .
+docker images
+docker tag tfm-microservice-2:latest 628366968712.dkr.ecr.us-east-1.amazonaws.com/tfm_microservice_2:latest
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 628366968712.dkr.ecr.us-east-1.amazonaws.com
+docker push 628366968712.dkr.ecr.us-east-1.amazonaws.com/tfm_microservice_2:latest
+
+aws eks --region us-east-1 update-kubeconfig --name tfm-eks
+
+
+kubectl
+
+curl -LO "https://dl.k8s.io/release/v1.29.0/bin/linux/amd64/kubectl"
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+kubectl version --client
+
+kubectl apply -f service.yaml
+kubectl get pods
+kubectl describe pod <nombre-del-pod>
+kubectl get svc
+ kubectl logs ecr-test-645fb5fd48-644q7
+
+
+eksctl
+
+curl --silent --location "https://github.com/eksctl-io/eksctl/releases/download/v0.174.0/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/eksctl /usr/local/bin
+eksctl version
+
+
+KUBECONFIG
+aws eks update-kubeconfig --name eks-tfm --region us-east-1
+kubectl config get-clusters
+
+aws credentials
+cat ~/.aws/credentials
+aws configure > cancel > permanent disable
+nano ~/.aws/credentials
+aws sts get-caller-identity
+
+
+ARGOCD
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+----Cambiémoslo a LoadBalancer para que puedas acceder desde el navegador:
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+----Luego obtén la IP pública con:
+kubectl get svc argocd-server -n argocd
+---Obtener la contraseña del usuario admin
+kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d && echo
+
+https://a30a9b0538bd4428780c367098bed033-622263208.us-east-1.elb.amazonaws.com
+
+
+kubectl create namespace monitoring
+kubectl apply -f monitoring-app.yaml
+
+crear con loadbalancer para ip externa
+kubectl get svc -n monitoring
+kubectl patch svc monitoring-grafana -n monitoring -p '{"spec": {"type": "LoadBalancer"}}'
+
+http://a5d3cd089b8f846d891d613f6a60916e-891111075.us-east-1.elb.amazonaws.com/login
+
+kubectl get secret prometheus-grafana -n monitoring -o jsonpath="{.data.admin-password}" | base64 -d && echo
+
+
+kubectl get pods -n monitoring | grep prometheus
+
+kubectl apply -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagers.yaml
+kubectl apply -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_podmonitors.yaml
+kubectl apply -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml
+kubectl apply -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml
+kubectl apply -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml
+kubectl apply -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_thanosrulers.yaml
+
+kubectl get crd | grep prometheus
+
+kubectl get pods -n monitoring | grep operator
+kubectl logs -n monitoring prometheus-kube-prometheus-operator-d8bc56f585-vjb25
+
+
+
+
+
+
+
+info de node group
+  aws eks describe-nodegroup \
+  --cluster-name tfm-eks \
+  --nodegroup-name tfm-ng \
+  --region us-east-1
+  
+ el cluster y el grupo de nodos debe crearse con el rol por defecot no con lab
+
+aws iam get-role --role-name c149604a3851739l10437560t1w462176-LabEksClusterRole-k490sogcaSUG \
+  --query "Role.Arn" --output text
+  
+ ARCH=amd64
+ PLATAFORM=$(uname -s)_$ARCH
+ 
+ 
+ 
+ecr
+628366968712.dkr.ecr.us-east-1.amazonaws.com/microservice/tfm-microservice
+462176377253.dkr.ecr.us-east-1.amazonaws.com/tfm-microservice
+
+
+docker build -t tfm-microservice .
+docker images
+docker tag tfm-microservice:latest 628366968712.dkr.ecr.us-east-1.amazonaws.com/microservice/tfm-microservice:latest
+docker push 628366968712.dkr.ecr.us-east-1.amazonaws.com/microservice/tfm-microservice:latest
+
+
+kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}'
+
+
+NAMESPACE
+kubectl create namespace microservices
+
+kubectl get all -n NAMESPACE
+
+UN SOLO ARCHIVO YAML
+kubectl apply -f ARCHIVO
+kubectl get all -n tfm
+kubectl get svc APP -n NAMESPACE
+
+kubectl get all -n tfm
+kubectl get ns
+kubectl get svc --all-namespaces
+
+kubectl delete deployment microservicio -n microservices  
+kubectl get pods -n tfm
+kubectl logs -n tfm <nombre-del-pod>
+
+
+PROMETHEUS
+kubectl create namespace monitoring
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+
+
+helm install kps prometheus-community/kube-prometheus-stack \
+  --namespace monitoring \
+  --set grafana.service.type=LoadBalancer
+
+kubectl --namespace monitoring get secrets kps-grafana -o jsonpath="{.data.admin-password}" | base64 -d ; echo
+kubectl get svc -n monitoring kps-grafana
+kubectl get servicemonitor -n monitoring
+
+kubectl get rs -n microservices
+get hpa -n microservices --watch
+kubectl top pods -n microservices
+ kubectl get pods -o wide -n monitorin
+ kubectl describe hpa microservicio-hpa -n microservices
+ -- uso de recursos por pod
+kubectl top pods -n microservices
+--Esto te dejará viendo en vivo cómo cambia.
+kubectl get hpa -n microservices -w
+
+
+
+
+GRAFANA
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+helm version
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm install kps prometheus-community/kube-prometheus-stack   --namespace monitoring   --set grafana.service.type=LoadBalancer
+kubectl --namespace monitoring get secrets kps-grafana -o jsonpath="{.data.admin-password}" | base64 -d ; echo
+kubectl get svc -n monitoring kps-grafana
+
+
+GRAFANA QUERY
+kube_deployment_status_replicas_available{deployment="microservicio", namespace="microservices"}
+count(kube_pod_status_phase{phase="Running", namespace="microservices", pod=~"microservicio.*"}) by (namespace)
+
+
+ghp_AAAAAaaaa_R0IjvuXJtn09IwYsXPc2yfsSCZacqJ10sj5N
+
+PASOS
+instalar terraform
+instalar kubectl
+ejecutar terraform/infraestructure
+ejecutar terraform/eks
+ejecutar terraform/argocd
+ejecutar terraform/prometheus
+ejecutar microservicios ecr
+construir microservicios
+verificar argocd
+	----Luego obtén la IP pública con:
+	kubectl get svc argocd-server -n argocd
+	---Obtener la contraseña del usuario admin
+	kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d && echo
+levantar apps desde codigo
+	kubectl apply -f application-microservicio-1.yaml -n argocd
+	kubectl apply -f application-microservicio-2.yaml -n argocd
+	kubectl apply -f application-servicemonitor.yaml -n argocd
+verificar grafana
+	kubectl get svc -n monitoring kps-grafana
+	kubectl --namespace monitoring get secrets kps-grafana -o jsonpath="{.data.admin-password}" | base64 -d ; echo
+	prom-operator
+configurar microservicios en argocd
+configurar service monitor en argocd
+
+
+sum by (pod) (
+    rate(container_cpu_usage_seconds_total{
+        namespace="microservices",
+        container!=""
+    }[5m])
+)
+* on(pod) group_left()
+kube_pod_status_phase{namespace="microservices", phase="Running"}
+
+
+Memoria por pod (todos)	Igual, con container_memory_usage_bytes	Global
+Peticiones HTTP por microservicio	Agrupando por deployment o namespace
+
+
+#!/bin/bash
+echo "📦 Instalando kubectl v1.29.0..."
+
+curl -LO "https://dl.k8s.io/release/v1.29.0/bin/linux/amd64/kubectl" &&
+chmod +x kubectl &&
+sudo mv kubectl /usr/local/bin/ &&
+kubectl version --client
+
+echo "✅ kubectl instalado correctamente."
