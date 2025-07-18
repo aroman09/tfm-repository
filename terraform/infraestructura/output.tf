@@ -2,16 +2,12 @@ output "vpc_id" {
   value = module.vpc.vpc_id
 }
 
-output "subnet_private_id" {
-  value = module.networking.subnet_private_id
+output "subnet_private_ids" {
+  value = module.networking.subnet_private_ids
 }
 
-output "subnet_private_id_2" {
-  value = module.networking.subnet_private_id_2
-}
-
-output "subnet_public_id" {
-  value = module.networking.subnet_public_id
+output "subnet_public_ids" {
+  value = module.networking.subnet_public_ids
 }
 
 output "nlb_dns" {

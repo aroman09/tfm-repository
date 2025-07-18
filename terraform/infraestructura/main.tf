@@ -14,5 +14,5 @@ module "networking" {
 
 module "nlb" {
   source           = "./nlb"
-  subnet_public_id = module.networking.subnet_public_id
+  subnet_public_ids = module.networking.subnet_public_ids
 }

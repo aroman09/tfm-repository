@@ -1,13 +1,14 @@
-output "subnet_public_id" {
-  description = "The ID of the public subnet"
-  value       = aws_subnet.tfm_subnet_publica.id
+output "subnet_private_ids" {
+  value = [
+    aws_subnet.tfm_subnet_privada_1.id,
+    aws_subnet.tfm_subnet_privada_2.id
+  ]
 }
 
-output "subnet_private_id" {
-  description = "The ID of the private subnet"
-  value       = aws_subnet.tfm_subnet_privada.id
-}
 
-output "subnet_private_id_2" {
-  value = aws_subnet.tfm_subnet_privada_2.id
+output "subnet_public_ids" {
+  value = [
+    aws_subnet.tfm_subnet_publica_1.id,
+    aws_subnet.tfm_subnet_publica_2.id
+  ]
 }
