@@ -54,7 +54,7 @@ metadata:
   name: microservicio-1-monitor
   namespace: microservices
   labels:
-    app: monitor-microservicio-1
+    app: microservicio-1
 spec:
   type: ClusterIP
   selector:

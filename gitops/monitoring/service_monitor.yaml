@@ -11,7 +11,7 @@ spec:
       - microservices
   selector:
     matchExpressions:
-      - { key: app, operator: In, values: [monitor-microservicio-1, monitor-microservicio-2] }
+      - { key: app, operator: In, values: [microservicio-1, microservicio-2] }
   endpoints:
     - port: http
       path: /actuator/prometheus
