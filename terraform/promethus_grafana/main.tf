@@ -35,10 +35,6 @@ prometheus:
       emptyDir: {}
 kube-state-metrics:
   enabled: true
-  metricAllowlist:
-    - kube_hpa_status_current_replicas
-  collectors:
-    - horizontalpodautoscalers
   metricLabelsAllowlist:
     - pods=[*]
     - deployments=[*]
