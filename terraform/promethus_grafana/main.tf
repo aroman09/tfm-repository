@@ -15,29 +15,35 @@ resource "kubernetes_namespace" "monitoring" {
 }
 
 resource "helm_release" "kube_prometheus_stack" {
-  name       = "kps"
-  namespace  = kubernetes_namespace.monitoring.metadata[0].name
-  repository = "https://prometheus-community.github.io/helm-charts"
-  chart      = "kube-prometheus-stack"
-  version    = "57.0.3"
+  name             = "kps"
+  namespace        = kubernetes_namespace.monitoring.metadata[0].name
+  repository       = "https://prometheus-community.github.io/helm-charts"
+  chart            = "kube-prometheus-stack"
+  version          = "57.0.3"
   create_namespace = false
+  force_update     = true
+  recreate_pods    = true
 
   values = [
     <<-EOF
-    grafana:
-      service:
-        type: LoadBalancer
-    kube-state-metrics:
-      enabled: true
-      metricAllowlist:
-        - kube_hpa_status_current_replicas
-      collectors:
-        - horizontalpodautoscalers
-      metricLabelsAllowlist:
-        - pods=[*]
-        - deployments=[*]
-        - horizontalpodautoscalers=[*]
-    EOF
+grafana:
+  service:
+    type: LoadBalancer
+prometheus:
+  prometheusSpec:
+    storageSpec:
+      emptyDir: {}
+kube-state-metrics:
+  enabled: true
+  metricAllowlist:
+    - kube_hpa_status_current_replicas
+  collectors:
+    - horizontalpodautoscalers
+  metricLabelsAllowlist:
+    - pods=[*]
+    - deployments=[*]
+    - horizontalpodautoscalers=[*]
+EOF
   ]
 }
 
