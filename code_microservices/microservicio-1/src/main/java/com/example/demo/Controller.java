@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/app/microservice-1")
+@RequestMapping("/app/microservicio-1")
 public class Controller {
     private int contador = 0;
     @GetMapping("/saludo")
