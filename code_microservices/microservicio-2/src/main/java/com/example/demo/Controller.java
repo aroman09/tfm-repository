@@ -4,8 +4,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/app/microservice-2")
 public class Controller {
-    @GetMapping("/")
+    @GetMapping("/saludo")
     public String getSaludo(){
         return "Hola mundo desde el microservicio-2 en la version1";
     }
